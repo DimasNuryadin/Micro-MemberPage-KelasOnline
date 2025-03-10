@@ -1,4 +1,17 @@
 /* Home */
+.on-light circle,
+.on-dark circle {
+  @apply fill-orange-500
+}
+
+.on-light path {
+  @apply fill-gray-900;
+}
+
+.on-dark path {
+  @apply fill-white;
+}
+
 .link-wrapped::before {
   @apply cursor-pointer z-10 inset-0 absolute;
   content: "";

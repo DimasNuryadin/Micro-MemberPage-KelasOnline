@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Header from "../parts/Header";
 
 export default function Home() {
   return (
@@ -7,11 +8,9 @@ export default function Home() {
         <title>Kelas Online</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div>
-          <h1>Saya adalah seorang manusia</h1>
-        </div>
-      </main>
+      <section className="container mx-auto pt-10">
+        <Header />
+      </section>
     </div>
   );
 }
