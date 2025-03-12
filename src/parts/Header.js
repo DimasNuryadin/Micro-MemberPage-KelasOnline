@@ -7,7 +7,7 @@ import propTypes from 'prop-types'
 export default function Header({ onLight }) {
   const router = useRouter();
   const linkColor = onLight ? "text-gray-900" : "text-white";
-  const linkCTA = router.pathname.indexOf("/login") > -1 ? `${process.env.NEXT_PUBLIC_MEMBERPAGE_URL}/register` : `${process.env.NEXT_PUBLIC_MEMBERPAGE_URL}/login`;
+  const linkCTA = router.pathname.indexOf("/login") > -1 ? `${process.env.NEXT_PUBLIC_BASE_URL}/register` : `${process.env.NEXT_PUBLIC_BASE_URL}/login`;
   const textCTA = router.pathname.indexOf("/login") > -1 ? `Daftar` : `Masuk`;
 
 
@@ -30,7 +30,9 @@ export default function Header({ onLight }) {
           <Link href="/" className={[linkColor, "hover:text-teal-500 text-lg px-6 py-3 font-medium"].join(" ")}>Story</Link>
         </li>
         <li>
-          <a target="_blank" rel="noopener noereferrer" href={linkCTA} className="bg-indigo-700 hover:bg-indigo-800 transition-all duration-200 text-white hover:text-teal-500 text-lg px-6 py-3 font-medium ml-6">{textCTA}</a>
+          <Link href={linkCTA} className="bg-indigo-700 hover:bg-indigo-800 transition-all duration-200 text-white hover:text-teal-500 text-lg px-6 py-3 font-medium ml-6">
+            {textCTA}
+          </Link>
         </li>
       </ul>
     </header>

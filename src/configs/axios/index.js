@@ -7,4 +7,6 @@ const instance = axios.create({
 
 instance.interceptors.response.use((response) => response.data, errorHandler);
 
+export { default as setAuthorizationHeader } from "./setAuthorizationHeader";
+
 export default instance;

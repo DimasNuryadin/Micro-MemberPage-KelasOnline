@@ -1,11 +1,42 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import users from '@/src/constants/api/users';
+import { setAuthorizationHeader } from "../configs/axios";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function submit(e) {
-    e.preventDefault()
+  const router = useRouter();
+
+  async function submit(e) {
+    e.preventDefault();
+    try {
+      const user = await users.login({ email, password })
+      setAuthorizationHeader(user.data.token);
+
+      const detail = await users.details();
+      localStorage.setItem("BWAMICRO:token", JSON.stringify({
+        ...user.data, email: email
+      }));
+
+      const production = process.env.NEXT_PUBLIC_FRONTPAGE_URL === "https://micro.vercel.app" ? "Domain = micro.vercel.app" : "";
+
+      const redirect = localStorage.getItem("BWAMICRO:redirect")
+      const userCookie = {
+        name: detail.data.name,
+        avatar: detail.data.avatar,
+      }
+
+      const expires = new Date(
+        new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+      )
+
+      document.cookie = `BWAMICRO:user=${JSON.stringify(userCookie)}; expires=${expires.toUTCString()}; path:/; ${production}`;
+      router.push(redirect || "/")
+    } catch (error) {
+      console.log("error :", error)
+    }
   }
 
   return (
