@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import users from '@/src/constants/api/users';
 import { setAuthorizationHeader } from "../configs/axios";
 import { useRouter } from "next/router";
+import useForm from "../helpers/hooks/useForm";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { populateProfile } from '@/src/store/actions/users';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [{ email, password }, setState] = useForm({
+    email: "",
+    password: "",
+  });
+
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
@@ -19,6 +28,9 @@ export default function LoginForm() {
       localStorage.setItem("BWAMICRO:token", JSON.stringify({
         ...user.data, email: email
       }));
+
+      // Menyimpan data payload ke redux
+      dispatch(populateProfile(detail.data))
 
       const production = process.env.NEXT_PUBLIC_FRONTPAGE_URL === "https://micro.vercel.app" ? "Domain = micro.vercel.app" : "";
 
@@ -48,11 +60,12 @@ export default function LoginForm() {
         <form onSubmit={submit} action="">
           <div className="flex flex-col mb-4">
             <label htmlFor="email" className="text-lg mb-2">Email Address</label>
-            <input type="email" className="bg-white focus:outline-none border w-full px-6 py-3 border-gray-600 focus:border-teal-500" placeholder="Your email address" value={email} onChange={(event) => setEmail(event.target.value)} />
+            <input name="email" type="email" className="bg-white focus:outline-none border w-full px-6 py-3 border-gray-600 focus:border-teal-500"
+              placeholder="Your email address" value={email} onChange={setState} />
           </div>
           <div className="flex flex-col mb-4">
             <label htmlFor="password" className="text-lg mb-2">Password Address</label>
-            <input type="password" className="bg-white focus:outline-none border w-full px-6 py-3 border-gray-600 focus:border-teal-500" placeholder="Your password address" value={password} onChange={(event) => setPassword(event.target.value)} />
+            <input name="password" type="password" className="bg-white focus:outline-none border w-full px-6 py-3 border-gray-600 focus:border-teal-500" placeholder="Your password address" value={password} onChange={setState} />
           </div>
           <button type="submit" className="bg-orange-500 hover:bg-orange-400 transition-all duration-200 focus:outline-none shadow-inner text-white px-6 py-3 mt-4 w-full">Daftar Now</button>
         </form>
